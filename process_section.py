@@ -111,20 +111,7 @@ def find_tag_syntax(soup):
     destroy_element(element)  # Mutates the soup!
     return text
 
-
-def ProcessSection(soup):
-    # Convert a PCGen element documentation section from HTML to markdown.
-    # Attempt to discover features like:
-    # - Anchor name, i.e. <a id="abilitypool" name="abilitypool">
-    #     -> inbound link name
-    # - Tag status, i.e. "New in 5.11.1"
-    print "----"
-
-    anchor = find_anchor(soup)  # Must be run before find_status()
-    status = find_status(soup)
-    syntax = find_tag_syntax(soup)
-    params = find_tag_parameters(soup)
-
+def convert_indent1_headers(soup):
     # Headings are currently marked using something like:
     #
     # <p class="indent1"><strong>Where it is used:</strong></p>
@@ -139,18 +126,18 @@ def ProcessSection(soup):
             x.name = "h2"
             x.string = text.strip(":")
 
+def ProcessSection(soup):
+    # Convert a PCGen element documentation section from HTML to markdown.
+    # Attempt to discover features like:
+    # - Anchor name, i.e. <a id="abilitypool" name="abilitypool">
+    #     -> inbound link name
+    # - Tag status, i.e. "New in 5.11.1"
+    anchor = find_anchor(soup)  # Must be run before find_status()
+    status = find_status(soup)
+    syntax = find_tag_syntax(soup)
+    params = find_tag_parameters(soup)
+    convert_indent1_headers(soup)
     md = pypandoc.convert(unicode(soup), 'md', format="html")
-
-    # print("Anchor: ")
-    # print(anchor)
-    # print("Status: ")
-    # print(status)
-    # print("Syntax: ")
-    # print(syntax)
-    # print("Parameters: ")
-    # pprint(params)
-    # print("Markdown: ")
-    # print(md)
 
     return {
         "anchor": anchor,
