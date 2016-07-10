@@ -1,15 +1,15 @@
-# C:\Users\lws\gits\pcgen\docs\listfilepages\globalfilestagpages\globalfilesbonus.html
-
-import bs4
 import os
 
+import bs4
+
+from config import base_output_dir, base_in_dir
+from file_list import files
 from html2soup import break_into_sections
 from process_section import ProcessSection
 from write_markdown import print_to_markdown
-from file_list import files
 
 
-def process_file(input_file_path, output_dir):
+def process_file(input_file_path, output_dir, relpath):
     with open(input_file_path, mode="r") as in_file:
         whole_file_html = in_file.read()
 
@@ -30,28 +30,24 @@ def process_file(input_file_path, output_dir):
 
     for soup_section in soup_sections:
         processed_section = ProcessSection(soup_section)
-        print_to_markdown(processed_section, output_dir)
+        print_to_markdown(processed_section, output_dir, relpath)
 
-
-base_output_dir = r"G:\\"
-base_in_dir = r"C:\Users\lws\gits\pcgen\docs\\"
 
 def create_folder_if_not_exist(full_dir_path):
     if os.path.exists(full_dir_path) and os.path.isdir(full_dir_path):
         return
     os.makedirs(full_dir_path)
 
-for path in files:
-    dir, fn = os.path.split(path)
+for relpath in files:
+    dir, fn = os.path.split(relpath)
     fn, ext = os.path.splitext(fn)
 
-
-    # ex1 = base_in_dir + r"\listfilepages\globalfilestagpages\globalfilesbonus.html"
-    input_file_name = base_in_dir + path
+    input_file_name = base_in_dir + relpath
     output_dir = os.path.join(base_output_dir, dir, fn)
     create_folder_if_not_exist(output_dir)
+
     try:
-        process_file(input_file_name, output_dir)
+        process_file(input_file_name, output_dir, relpath)
     except Exception as e:
-        print "Died while trying to process file:", path
+        print "Died while trying to process file:", relpath
         raise

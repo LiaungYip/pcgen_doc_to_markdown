@@ -1,5 +1,8 @@
 files = [
-    "listfilepages\globalfilestagpages\globalfilesformulas.html",
+    "listfilepages\globalfilestagpages\globalfilesbonus.html",
+]
+
+files = [
     # "greetings.html",
     # "index.html",
     # "navlistindex.html",
@@ -350,3 +353,4 @@ files = [
     # "walkthroughpages\walkthroughprintnew.html",
     # "walkthroughpages\walkthroughsectionheading.html",
 ]
+
