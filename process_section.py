@@ -77,11 +77,7 @@ def find_tag_parameters(soup):
     variables_used = soup.find_all(string=variables_used_re)
 
     for v in variables_used:
-        try:
-            element = get_parent_p(v)
-        except AttributeError as e:
-            print v
-            raise e
+        element = get_parent_p(v)
         del element["class"]
         element.name = "li"
         if element.strong:

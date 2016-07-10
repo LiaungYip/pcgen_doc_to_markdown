@@ -46,7 +46,6 @@ def print_to_markdown(processed_section, output_dir):
     print ("Writing: %s" % output_file_path)
 
     content = md_template.format(**processed_section)
-    print content
 
     with open(output_file_path, "wb") as out_file:
         out_file.write(content.encode('utf-8'))
