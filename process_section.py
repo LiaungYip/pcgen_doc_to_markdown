@@ -1,6 +1,8 @@
 import re
 
 import pypandoc
+import bs4
+import copy
 
 from bs_util import condense_whitespace, destroy_element, get_parent_p
 
@@ -67,22 +69,36 @@ def find_tag_parameters(soup):
     #   - Variables Used (z): Number, variable or formula (Number to add)
     params = list()
 
+    param_soup = bs4.BeautifulSoup()
+    param_soup.append(bs4.BeautifulSoup.new_tag(param_soup, 'ul'))
+
+
     variables_used_re = re.compile("\s*Variables Used.*")
     variables_used = soup.find_all(string=variables_used_re)
 
     for v in variables_used:
-        element = get_parent_p(v)
-        element["class"] = None
-        assert element.find(
-            "a") is None, "Help! Hyperlinks in something I'm converting to Plain Text!"
-        text = element.get_text(" ", strip=True)
-        # Extract "x" from "Variables Used (x):"
-        text = re.sub("Variables Used \((\w)\)", "\g<1>", text)
-        text = condense_whitespace(text)
-        params.append(text)
+        try:
+            element = get_parent_p(v)
+        except AttributeError as e:
+            print v
+            raise e
+        del element["class"]
+        element.name = "li"
+        if element.strong:
+            element.strong.unwrap()
+        param_soup.ul.append(copy.copy(element))
+        # assert element.find(
+        #     "a") is None, "Help! Hyperlinks in something I'm converting to Plain Text! %s" % element
+        # text = element.get_text(" ", strip=True)
+        # # Extract "x" from "Variables Used (x):"
+        # text = re.sub("Variables Used \((\w)\)", "\g<1>", text)
+        # text = condense_whitespace(text)
+        # params.append(text)
         destroy_element(element)  # Mutates the soup!
 
-    params_markdown = "\n".join(["-   " + p for p in params])
+    # params_markdown = "\n".join(["-   " + p for p in params])
+    params_markdown = pypandoc.convert(unicode(param_soup),"md","html")
+    params_markdown = re.sub("Variables Used \((\w)\)", "\g<1>", params_markdown)
 
     return params_markdown
 
@@ -136,6 +152,7 @@ def ProcessSection(soup):
     status = find_status(soup)
     syntax = find_tag_syntax(soup)
     params = find_tag_parameters(soup)
+    # params = None
     convert_indent1_headers(soup)
     md = pypandoc.convert(unicode(soup), 'md', format="html")
 

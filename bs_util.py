@@ -1,4 +1,5 @@
 import re
+import bs4
 
 
 def condense_whitespace(text):
@@ -14,7 +15,7 @@ def destroy_element(element):
 def get_parent_p(element):
     # Recursively ascend the tree until we find the enclosing <p> tag.
     p = element
-    while p.name != "p":
+    while isinstance(p, bs4.NavigableString) or p.name != "p":
         p = p.parent
     return p
 
