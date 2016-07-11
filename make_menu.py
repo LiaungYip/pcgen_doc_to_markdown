@@ -20,13 +20,16 @@ for f in files:
     for parent, child in zip(parts[:-1], parts[1:]):
         pairs.add((parent, child))
 
-pprint(pairs)
+# pprint(pairs)
 
 template = """[[menu.main]]
     name = "{name}"
     identifier = "{child}"
     parent = "{parent}"
 """
+
+out_file = open("G:/menu.toml", "w")
+
 for pair in pairs:
     parent = pair[0]
     child = pair[1]
@@ -35,4 +38,6 @@ for pair in pairs:
     for trash in ["filestagpages","datafiles","globalfiles","gamemode","systemfiles"]:
         name = name.replace(trash,"")
 
-    print template.format(parent = parent, child = child, name = name)
+    out_file.write(template.format(parent = parent, child = child, name = name))
+
+out_file.close()
