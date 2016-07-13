@@ -1,8 +1,8 @@
-files = [
+files_test = [
     "listfilepages\globalfilestagpages\globalfilesbonus.html",
 ]
 
-files = [
+files_full = [
     # "greetings.html",
     # "index.html",
     # "navlistindex.html",
@@ -354,3 +354,4 @@ files = [
     # "walkthroughpages\walkthroughsectionheading.html",
 ]
 
+files = files_test

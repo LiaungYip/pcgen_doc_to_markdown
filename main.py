@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import bs4
 
@@ -8,6 +9,7 @@ from html2soup import break_into_sections
 from process_section import ProcessSection
 from write_markdown import print_to_markdown
 
+shutil.rmtree(base_output_dir)
 
 def process_file(input_file_path, output_dir, relpath):
     with open(input_file_path, mode="r") as in_file:
@@ -42,7 +44,7 @@ for relpath in files:
     dir, fn = os.path.split(relpath)
     fn, ext = os.path.splitext(fn)
 
-    input_file_name = base_in_dir + relpath
+    input_file_name = os.path.join (base_in_dir, relpath)
     output_dir = os.path.join(base_output_dir, dir, fn)
     create_folder_if_not_exist(output_dir)
 
