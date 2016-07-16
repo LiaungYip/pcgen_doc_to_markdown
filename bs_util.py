@@ -34,3 +34,16 @@ def strip_whitespace(soup):
             # if child.string:
             #     child.string = child.string.strip
             # print child
+
+def delete_empty_newline_elements(soup):
+    # Remove all spurious "\n" strings, which are inserted whenever the HTML had
+    # whitespace between tags
+    for element in soup.find_all(text=u"\n"):
+        element.extract()
+
+
+def delete_all_comments(soup):
+    # Delete all comments, since they complicate parsing.
+    # They would not survive conversion to Markdown anyway
+    for comments in soup.findAll(text=lambda text: isinstance(text, bs4.Comment)):
+        comments.extract()

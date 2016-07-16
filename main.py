@@ -8,6 +8,7 @@ from file_list import files
 from html2soup import break_into_sections
 from process_section import ProcessSection
 from write_markdown import print_to_markdown
+import bs_util
 
 if os.path.exists(base_output_dir):
     shutil.rmtree(base_output_dir)
@@ -18,17 +19,13 @@ def process_file(input_file_path, output_dir, relpath):
 
     whole_file_soup = bs4.BeautifulSoup(whole_file_html)
 
-    # Remove all spurious "\n" strings, which are inserted whenever the HTML had
-    # whitespace between tags
-    for element in whole_file_soup.find_all(text=u"\n"):
-        element.extract()
-
-    # Delete all comments, since they complicate parsing.
-    # They would not survive conversion to Markdown anyway
-    for comments in whole_file_soup.findAll(text=lambda text: isinstance(text, bs4.Comment)):
-        comments.extract()
+    bs_util.delete_empty_newline_elements(whole_file_soup)
+    bs_util.delete_all_comments(whole_file_soup)
 
     body = whole_file_soup.body # HTML <body>
+
+
+
     soup_sections = break_into_sections(body) # Break up by <hr /> tags
 
     for soup_section in soup_sections:
