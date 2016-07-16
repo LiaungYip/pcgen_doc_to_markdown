@@ -140,7 +140,7 @@ def convert_indent1_headers(soup):
             x.string = text.strip(":")
 
 
-def ProcessSection(soup):
+def process_tag_doc_section(soup):
     # Convert a PCGen element documentation section from HTML to markdown.
     # Attempt to discover features like:
     # - Anchor name, i.e. <a id="abilitypool" name="abilitypool">
