@@ -1,8 +1,8 @@
+import copy
 import re
 
-import pypandoc
 import bs4
-import copy
+import pypandoc
 
 from bs_util import condense_whitespace, destroy_element, get_parent_p
 
@@ -14,8 +14,8 @@ def find_anchor(soup):
     for a in anchors:
         # Filter named anchors from outbound hyperlinks
         if a.has_attr("id") and a.has_attr("name"):
-            assert a["id"] == a[
-                "name"]  # Malformed HTML - should be corrected in original docs
+            # Malformed HTML - should be corrected in original docs
+            assert a["id"] == a["name"]
             return a["id"]
     return None
 
@@ -72,7 +72,6 @@ def find_tag_parameters(soup):
     param_soup = bs4.BeautifulSoup()
     param_soup.append(bs4.BeautifulSoup.new_tag(param_soup, 'ul'))
 
-
     variables_used_re = re.compile("\s*Variables Used.*")
     variables_used = soup.find_all(string=variables_used_re)
 
@@ -93,8 +92,9 @@ def find_tag_parameters(soup):
         destroy_element(element)  # Mutates the soup!
 
     # params_markdown = "\n".join(["-   " + p for p in params])
-    params_markdown = pypandoc.convert(unicode(param_soup),"md","html")
-    params_markdown = re.sub("Variables Used \((\w)\)", "\g<1>", params_markdown)
+    params_markdown = pypandoc.convert(unicode(param_soup), "md", "html")
+    params_markdown = re.sub("Variables Used \((\w)\)", "\g<1>",
+                             params_markdown)
 
     return params_markdown
 
@@ -123,6 +123,7 @@ def find_tag_syntax(soup):
     destroy_element(element)  # Mutates the soup!
     return text
 
+
 def convert_indent1_headers(soup):
     # Headings are currently marked using something like:
     #
@@ -137,6 +138,7 @@ def convert_indent1_headers(soup):
             del x["class"]
             x.name = "h2"
             x.string = text.strip(":")
+
 
 def ProcessSection(soup):
     # Convert a PCGen element documentation section from HTML to markdown.

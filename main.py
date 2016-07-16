@@ -9,7 +9,8 @@ from html2soup import break_into_sections
 from process_section import ProcessSection
 from write_markdown import print_to_markdown
 
-shutil.rmtree(base_output_dir)
+if os.path.exists(base_output_dir):
+    shutil.rmtree(base_output_dir)
 
 def process_file(input_file_path, output_dir, relpath):
     with open(input_file_path, mode="r") as in_file:
