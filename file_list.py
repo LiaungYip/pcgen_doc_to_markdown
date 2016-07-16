@@ -354,4 +354,4 @@ files_full = [
     # "walkthroughpages\walkthroughsectionheading.html",
 ]
 
-files = files_test
+files = files_full

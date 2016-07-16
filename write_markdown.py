@@ -3,14 +3,14 @@ import os
 
 md_template = u"""+++
 date = "{date}"
-title = "{anchor}"
+title = "{title}"
 original_url = "{original_url}"
 
 [menu.main]
     identifier = "{id}"
+    name = "{menuname}"
     parent = "{parent}"
 +++
-# {anchor}
 
 ## Status
 
@@ -83,8 +83,15 @@ def print_to_markdown(processed_section, output_dir, relpath):
     # if anchor:
     #     id = id + "_" + anchor
 
-    content = md_template.format(original_url=original_url, date=date,
-                                 parent=parent, id = id, **processed_section)
+    if anchor:
+        menuname = anchor.upper()
+        title = menuname
+    else:
+        menuname = parent.upper()
+        title = menuname
+
+    content = md_template.format(title = title, original_url=original_url, date=date,
+                                 parent=parent, id = id, menuname = menuname, **processed_section)
 
     with open(output_file_path, "wb") as out_file:
         out_file.write(content.encode('utf-8'))
