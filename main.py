@@ -8,7 +8,7 @@ from config import base_output_dir, base_in_dir
 from file_list import all_files
 from html2soup import break_into_sections
 from process_section import process_tag_doc_section
-from write_markdown import print_to_markdown
+from write_markdown import print_tag_doc_to_markdown, print_normal_page_to_markdown
 
 if os.path.exists(base_output_dir):
     shutil.rmtree(base_output_dir)
@@ -31,7 +31,9 @@ def process_file(input_file_path, output_dir, relpath):
         soup_sections = break_into_sections(tag_docs_soup)  # Break up by <hr /> tags
         for soup_section in soup_sections:
             processed_section = process_tag_doc_section(soup_section)
-            print_to_markdown(processed_section, output_dir, relpath)
+            print_tag_doc_to_markdown(processed_section, output_dir, relpath)
+
+    print_normal_page_to_markdown(whole_file_soup, output_dir, relpath)
 
 
 def create_folder_if_not_exist(full_dir_path):

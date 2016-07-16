@@ -1,7 +1,7 @@
 import datetime
 import os
 
-md_template = u"""+++
+tag_doc_markdown_template = u"""+++
 date = "{date}"
 title = "{title}"
 original_url = "{original_url}"
@@ -52,7 +52,7 @@ def generate_file_name(output_dir, anchor_name):
     return seq_name(n)
 
 
-def print_to_markdown(processed_section, output_dir, relpath):
+def print_tag_doc_to_markdown(processed_section, output_dir, relpath):
     # Sample relpath:
     # "listfilepages\globalfilestagpages\globalfilesbonus.html"
 
@@ -90,8 +90,27 @@ def print_to_markdown(processed_section, output_dir, relpath):
         menuname = parent.upper()
         title = menuname
 
-    content = md_template.format(title = title, original_url=original_url, date=date,
-                                 parent=parent, id = id, menuname = menuname, **processed_section)
+    content = tag_doc_markdown_template.format(title = title, original_url=original_url, date=date,
+                                               parent=parent, id = id, menuname = menuname, **processed_section)
 
     with open(output_file_path, "wb") as out_file:
         out_file.write(content.encode('utf-8'))
+
+
+def print_normal_page_to_markdown(soup, output_dir, relpath):
+    # Sample relpath:
+    # "listfilepages\globalfilestagpages\globalfilesbonus.html"
+    dir, file = os.path.split(relpath)
+    file, _ = os.path.splitext(file)
+    output_file_path = os.path.join(output_dir, dir) + "/" + file + ".md"
+
+    print ("Writing: %s" % output_file_path)
+
+    date = str(datetime.date.today())
+    original_url = relpath.replace("\\","/")
+
+    # If there's a directory named for it, the file is an index
+    # Otherwise, it's just a normal page
+
+
+

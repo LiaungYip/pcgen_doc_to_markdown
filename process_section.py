@@ -3,6 +3,7 @@ import re
 
 import bs4
 import pypandoc
+import html2text
 
 from bs_util import condense_whitespace, destroy_element, get_parent_p
 
@@ -92,7 +93,8 @@ def find_tag_parameters(soup):
         destroy_element(element)  # Mutates the soup!
 
     # params_markdown = "\n".join(["-   " + p for p in params])
-    params_markdown = pypandoc.convert(unicode(param_soup), "md", "html")
+    # params_markdown = pypandoc.convert(unicode(param_soup), "md", "html")
+    params_markdown = html2text.html2text(unicode(param_soup))
     params_markdown = re.sub("Variables Used \((\w)\)", "\g<1>",
                              params_markdown)
 
@@ -152,7 +154,8 @@ def process_tag_doc_section(soup):
     params = find_tag_parameters(soup)
     # params = None
     convert_indent1_headers(soup)
-    md = pypandoc.convert(unicode(soup), 'md', format="html")
+    # md = pypandoc.convert(unicode(soup), 'md', format="html")
+    md = html2text.html2text(unicode(soup))
 
     return {
         "anchor": anchor,
