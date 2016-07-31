@@ -131,19 +131,18 @@ def print_tag_doc_to_markdown(processed_section, output_dir, relpath):
 normal_page_markdown_template = u"""+++
 date = "{date}"
 title = "{title}"
-original_url = "{original_url}"
+original_url = "/{original_url}"
 
 [menu.main]
-    identifier = "{id}_index"
+    identifier = "{parent}_{name}"
     name = "{title}"
     parent = "{parent}"
+    {weight}
 +++
 {md}
 """
 
 def print_normal_page_to_markdown(soup, relpath):
-
-
 
     # Sample relpath:
     # "listfilepages\globalfilestagpages\globalfilesbonus.html"
@@ -151,7 +150,7 @@ def print_normal_page_to_markdown(soup, relpath):
     file, _ = os.path.splitext(file)
     output_file_path = os.path.join(base_output_dir, dir) + "/" + file + ".md"
 
-    print ("Writing: %s" % output_file_path)
+
 
     date = str(datetime.date.today())
     original_url = relpath.replace("\\","/")
@@ -163,6 +162,11 @@ def print_normal_page_to_markdown(soup, relpath):
     else:
         title = file
 
+    weight = ""
+    if "index" in relpath:
+        title = "Index : " + title
+        weight = "    weight = -1"
+
     md = pypandoc.convert(unicode(soup),"md","html")
 
     dir = dir.replace("\\","/")
@@ -171,14 +175,23 @@ def print_normal_page_to_markdown(soup, relpath):
     content = normal_page_markdown_template.format(
         date = date,
         original_url = original_url,
-        id = file,
-        menuname = file,
+        id = parent,
+        name = file,
         parent = parent,
         title = title,
         md = md,
+        weight = weight,
     )
 
-    out_dir, _ = os.path.split(output_file_path)
+    out_dir, out_file_name = os.path.split(output_file_path)
+    # Hugo quirk - '/credits/index.html' actually needs to be /credits.html .
+    # So go up a folder.
+    if "index" in relpath:
+        out_dir, output_file = os.path.split(out_dir)
+        output_file = output_file + ".md"
+        output_file_path = os.path.join(out_dir, output_file)
+
+    print ("Writing: %s" % output_file_path)
     create_folder_if_not_exist(out_dir)
     with open(output_file_path, "wb") as out_file:
         out_file.write(content.encode('utf-8'))
