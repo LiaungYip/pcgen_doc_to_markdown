@@ -6,6 +6,7 @@ import bs4
 import bs_util
 from config import base_output_dir, base_in_dir
 from file_list import all_files
+from filesystem_util import create_folder_if_not_exist
 from html2soup import break_into_sections
 from process_section import process_tag_doc_section
 from write_markdown import print_tag_doc_to_markdown, print_normal_page_to_markdown
@@ -33,13 +34,7 @@ def process_file(input_file_path, output_dir, relpath):
             processed_section = process_tag_doc_section(soup_section)
             print_tag_doc_to_markdown(processed_section, output_dir, relpath)
 
-    print_normal_page_to_markdown(whole_file_soup, output_dir, relpath)
-
-
-def create_folder_if_not_exist(full_dir_path):
-    if os.path.exists(full_dir_path) and os.path.isdir(full_dir_path):
-        return
-    os.makedirs(full_dir_path)
+    print_normal_page_to_markdown(whole_file_soup, relpath)
 
 
 for relpath in all_files:
@@ -48,7 +43,6 @@ for relpath in all_files:
 
     input_file_name = os.path.join(base_in_dir, relpath)
     output_dir = os.path.join(base_output_dir, dir, fn)
-    create_folder_if_not_exist(output_dir)
 
     try:
         process_file(input_file_name, output_dir, relpath)
