@@ -41,8 +41,8 @@ files_tags = [
     "list/system/gamemode-rules.html",
     "list/system/gamemode-statsandchecks.html",
     "list/system/gamemode-tips.html",
-    "list/system/bio-settings.html",
-    "list/system/size-adjustment.html",
+    "list/system/biosettings.html",
+    "list/system/sizeadjustment.html",
     "list/system/traits.html",
 ]
 
@@ -93,9 +93,9 @@ tag_files_human_names = {
     "gamemode-rules":                    " (Game Mode: rules.lst)",
     "gamemode-statsandchecks":           " (Game Mode: statsandchecks.lst)",
     "gamemode-tips":                     " (Game Mode: tips.txt)",
-    "biosettings":                       " (Game Mode: bio/biosettings.lst)",
-    "sizeadjustment":                    " (Game Mode: sizeAdjustment.lst)",
-    "traits":                            " (Game Mode: bio/traits.lst)",
+    "biosettings":                       " (System: bio/biosettings.lst)",
+    "sizeadjustment":                    " (System: sizeAdjustment.lst)",
+    "traits":                            " (System: bio/traits.lst)",
 }
 
 files_no_tags = [
@@ -380,8 +380,8 @@ files_no_tags = [
     "tab/players/index.html",
     "tab/players/ability.html",
     "tab/players/preview.html",
-    "tab/source/button-customise.html",
-    "tab/source/index.html",
+    "tab/source-tab/button-customise.html",
+    "tab/source-tab/index.html",
     "walkthrough/toolbar-quick-icons.html",
     "walkthrough/create-character.html",
     "walkthrough/create-new.html",

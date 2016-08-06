@@ -35,8 +35,8 @@ from file_list import tag_files_human_names
 tag_doc_markdown_template = u"""+++
 date = "{date}"
 title = "{title}"
-original_url = "{original_url}"
-categories = [ "list_file_tag", "{parent}" ]
+original_url = "/{original_url}"
+categories = [ "all-tag", "{parent}-tag" ]
 +++
 
 ## Status
@@ -186,10 +186,17 @@ def print_normal_page_to_markdown(soup, relpath):
     out_dir, out_file_name = os.path.split(output_file_path)
     # Hugo quirk - '/credits/index.html' actually needs to be /credits.html .
     # So go up a folder.
+    #
+    # ... actually, that broke a lot of things. Try something else.
+    #
+    # if "index" in relpath:
+    #     out_dir, output_file = os.path.split(out_dir)
+    #     output_file = output_file + ".md"
+    #     output_file_path = os.path.join(out_dir, output_file)
+
     if "index" in relpath:
-        out_dir, output_file = os.path.split(out_dir)
-        output_file = output_file + ".md"
-        output_file_path = os.path.join(out_dir, output_file)
+        out_file_name = parent + "_" + out_file_name
+        output_file_path = os.path.join (out_dir, out_file_name)
 
     print ("Writing: %s" % output_file_path)
     create_folder_if_not_exist(out_dir)
